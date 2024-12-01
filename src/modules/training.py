@@ -99,33 +99,40 @@ def fit_all_models(X_trains, y_train, model_name, model, params, compression = N
     if not os.path.exists(path_dir):
         os.makedirs(path_dir)
     
+    # Define base parameters used in all models
+    base_params = {'y_train': y_train, 'model_name': model_name, 'model': model, 'compression': compression}
+    
+    # Define gridsearch params used by gridsearch models
+    grid_params = {
+        'gridsearch': True, 'gridsearch_params': params,
+        'gridsearch_scoring' = ['roc_auc', 'recall', 'f1']
+    }
+    
     # Fit pca and feature-selected models with and without resampling
     for state in [False, True]:
+        # Set the resample mode
+        base_params['resample'] = state
+        
+        # Define the appropriate path extension
         if state:
             path_ext = '_SMOTE'
         else:
             path_ext = ''
         
         # Fit base model
-        fit_model(X_trains[0], y_train, model_name, model, resample = state,
-                  save_path = f'{path_dir}/{model_name}_base{path_ext}', compression = compression)
+        fit_model(X_trains[0], save_path = f'{path_dir}/{model_name}_base{path_ext}', **base_params)
         
         # Gridsearch full model
-        fit_model(X_trains[0], y_train, model_name, model, resample = state,
-                  gridsearch = True, gridsearch_params = params, gridsearch_scoring = ['roc_auc', 'recall', 'f1'],
-                  save_path = f'{path_dir}/{model_name}_grid{path_ext}', compression = compression)
+        fit_model(X_trains[0], save_path = f'{path_dir}/{model_name}_grid{path_ext}',
+                  **base_params, **grid_params)
         
         # Gridsearch pca model
-        fit_model(X_trains[2], y_train, model_name, model, resample = state,
-                  gridsearch = True, gridsearch_params = params, gridsearch_scoring = ['roc_auc', 'recall', 'f1'],
-                  save_path = f'{path_dir}/{model_name}_pca{path_ext}', compression = compression)
+        fit_model(X_trains[2], save_path = f'{path_dir}/{model_name}_pca{path_ext}',
+                  **base_params, **grid_params)
         
         # Gridsearch feature selected models
         for k in list(X_trains[1].keys()):
-            fit_model(X_trains[1][k], y_train, model_name, model, resample = state,
-                      gridsearch = True, gridsearch_params = params,
-                      gridsearch_scoring = ['roc_auc', 'recall', 'f1'],
-                      save_path = f'{path_dir}/{model_name}_top{k:02d}{path_ext}',
-                      compression = compression)
+            fit_model(X_trains[1][k], save_path = f'{path_dir}/{model_name}_top{k:02d}{path_ext}',
+                      **base_params, **grid_params)
             
     return

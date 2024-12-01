@@ -33,8 +33,13 @@ def set_text_params(ax, title = '', xlabel = '', ylabel = '',
 
 def map_dataframe_column(df, columns, map_dict):
     '''
-    '''
+    Applies a mapping to a set of column(s) of a dataframe.
     
+    args:
+        df: pandas DataFrame to modify
+        columns: str or list of str denoting columns to modify
+        map_dict: dict specifying mappings for values in columns
+    '''
     if type(columns) == str:
         df[columns] = df[columns].map(map_dict)
     elif type(columns) == list:
@@ -55,6 +60,7 @@ def save_model(model, path, compression = None):
         compression: None, 'gzip', 'bz2', or 'lzma' - whether to compress the pickled model file using
             the selected compression
     '''
+    # Apply specific compression, if applicable using appropriate context manager
     if compression is not None and compression in ['gzip', 'bz2', 'lzma']:
         if compression == 'gzip':
             ext = '.pickle.gz'
@@ -69,6 +75,7 @@ def save_model(model, path, compression = None):
             with lzma.open(path + ext, 'wb') as f:
                 pickle.dump(model, f)
     else:
+        # Otherwise, save the file uncompressed
         if compression is not None:
             print('Unknown compression method, defaulting to uncompressed pickle format.')
         
@@ -91,17 +98,20 @@ def load_model(path, compression = None):
     
     returns: model - deserialized object respresenting a fitted sklearn Model
     '''
+    # If no compression type is passed in, infer from the file extension
     if compression is None:
         ext = path.split('.')[-1]
     else:
         compression_map = {'gzip': 'gz', 'bz2': 'bz2', 'lzma': 'xz', 'pickle' : 'pickle'}
         ext = compression_map[compression]
     
+    # If the extension is not recognized, abort
     if ext not in ['pickle', 'gz', 'bz2', 'xz']:
         print(f'Unknown extension type at {path}, model not loaded.')
         
         return
     
+    # Load using appropriate context manager
     if ext == 'gz':
         with gzip.open(path, 'rb') as f:
             model = pickle.load(f)
