@@ -105,7 +105,7 @@ def fit_all_models(X_trains, y_train, model_name, model, params, compression = N
     # Define gridsearch params used by gridsearch models
     grid_params = {
         'gridsearch': True, 'gridsearch_params': params,
-        'gridsearch_scoring' = ['roc_auc', 'recall', 'f1']
+        'gridsearch_scoring': ['roc_auc', 'recall', 'f1']
     }
     
     # Fit pca and feature-selected models with and without resampling
