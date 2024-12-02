@@ -17,12 +17,14 @@ All of the models were saved as pickled objects under [models](https://github.co
 |   |	└── telco-customer-churn.csv
 |   └──  cleaned/
 |   	└── telco-churn-data-cleaned-not-encoded.csv
+|
 |── models/                          # Pickled and compressed trained scikit-learn models
 |   ├── bayes/                       # Trained Bernoulli Naive Bayes models
 |   ├── forest/                      # Trained Random Forest Classifier models
 |   ├── logreg/                      # Trained Logistic Regression models
 |   └──  xgboost/                    # Trained XGBoost Classifier models
-|── src/ # Notebooks go here
+|
+|── src/                             # Notebooks go here
 |   ├── EDA.ipynb                    # Exploratory data analysis and data cleaning
 |   ├── Modeling.ipynb               # Training and model evaluation
 |   └── modules/                     # Modules used by notebooks go here
