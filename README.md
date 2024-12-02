@@ -9,7 +9,7 @@ The modeling process consists of fitting multiple models to the data and evaluat
 
 All of the models were saved as pickled objects under [models](https://github.com/JoshuaGottlieb/Telco-Churn-Predictions/tree/main/models) and compressed using the LZMA algorithm. In order to keep the notebooks easy to read and to reduce repetition of code, many functions were moved into project [modules](https://github.com/JoshuaGottlieb/Telco-Churn-Predictions/tree/main/src/modules), separated by core function use. For more information, the modules contain full documentation, and module summaries are shown below under the repository structure.
 
-## Respository Structure
+## Repository Structure
 ```
 .
 |── data/                            # Raw and cleaned data
